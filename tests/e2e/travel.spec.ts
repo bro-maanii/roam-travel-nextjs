@@ -168,7 +168,7 @@ test("mobile navigation, keyboard tabs and responsive layouts", async ({
 test("page loads cleanly and captures desktop and mobile previews", async ({
   page,
 }) => {
-  mkdirSync("artifacts", { recursive: true });
+  mkdirSync("test-results/previews", { recursive: true });
   const errors: string[] = [];
   page.on("pageerror", (error) => errors.push(error.message));
   await page.setViewportSize({ width: 1440, height: 1050 });
@@ -176,9 +176,9 @@ test("page loads cleanly and captures desktop and mobile previews", async ({
   await page
     .locator(".hero-image")
     .evaluate((image: HTMLImageElement) => image.decode());
-  await page.screenshot({ path: "artifacts/desktop.png", fullPage: true });
+  await page.screenshot({ path: "test-results/previews/desktop.png", fullPage: true });
   await page.setViewportSize({ width: 390, height: 844 });
-  await page.screenshot({ path: "artifacts/mobile.png", fullPage: true });
+  await page.screenshot({ path: "test-results/previews/mobile.png", fullPage: true });
   expect(errors).toEqual([]);
 });
 

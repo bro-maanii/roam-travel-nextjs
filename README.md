@@ -6,7 +6,6 @@ A complete frontend technical assessment built with **Next.js App Router, TypeSc
 
 - **GitHub:** https://github.com/bro-maanii/roam-travel-nextjs
 - **Live website:** https://roam-travel-nextjs.vercel.app
-- **Upload-ready submission:** [Roam Assessment Submission (PDF)](submission/Roam-Assessment-Submission.pdf)
 
 ## Run locally
 
@@ -102,7 +101,7 @@ npx playwright install chromium
 npm run test:e2e
 ```
 
-Playwright starts a local production server on port 3001. The suite checks all service searches, enquiry handoff, destination filtering and saving, modal behavior, contact validation, mobile navigation, keyboard tabs, horizontal overflow at 320/390/768/1024/1440px, runtime errors, and automated accessibility rules. It also saves desktop and mobile screenshots to `artifacts/`.
+Playwright starts a local production server on port 3001. The suite checks all service searches, enquiry handoff, destination filtering and saving, modal behavior, contact validation, mobile navigation, keyboard tabs, horizontal overflow at 320/390/768/1024/1440px, runtime errors, and automated accessibility rules. Test screenshots are saved in the ignored `test-results/previews/` directory.
 
 To test an existing deployment instead:
 
