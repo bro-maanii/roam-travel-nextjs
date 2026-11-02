@@ -5,11 +5,11 @@ Generated from project sources at 2026-11-02T11:45:38.693Z.
 
 ## Project
 
-- Name: BizwaveConsultancyTask
-- Product type: Unknown
-- Stack: Unknown
-- Color mode: unknown
-- Density: unknown
+- Name: Roam Travel
+- Product type: Travel agency
+- Stack: Next.js App Router, TypeScript, Tailwind CSS 4, GSAP
+- Color mode: light
+- Density: spacious editorial layout
 
 ## Sources
 
@@ -29,7 +29,9 @@ Generated from project sources at 2026-11-02T11:45:38.693Z.
 
 ### Must
 
-- None recorded
+- Four functional service searches with local sample data.
+- Responsive layouts and keyboard-accessible controls.
+- Respect reduced motion preferences.
 
 ### Avoid
 
@@ -37,5 +39,7 @@ Generated from project sources at 2026-11-02T11:45:38.693Z.
 
 ## Decisions
 
-- None recorded
+- Use ivory backgrounds, forest green text and lime accents.
+- Pair sans-serif copy with italic serif headlines and destination photography.
+- Keep booking, pricing and testimonials clearly marked as illustrative.
 

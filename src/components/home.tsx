@@ -131,7 +131,6 @@ export function Home() {
             priority
             sizes="100vw"
             className="hero-image object-cover"
-            quality={90}
           />
           <div className="hero-shade" />
           <div className="hero-content">
