@@ -3,7 +3,7 @@ import { Asterisk } from "lucide-react";
 export function Brand({ light = false }: { light?: boolean }) {
   return (
     <a
-      href="#home"
+      href="/#home"
       aria-label="Roam home"
       className={`brand ${light ? "brand-light" : ""}`}
     >

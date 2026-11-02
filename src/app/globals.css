@@ -1,5 +1,324 @@
 @import "tailwindcss";
 
+/* Shared interaction and information pages */
+.contact-details a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 11px;
+  overflow-wrap: anywhere;
+}
+.field-error {
+  color: #9b3228;
+  font-size: 11px;
+  line-height: 1.6;
+}
+.contact-card [aria-invalid="true"] {
+  border-color: #a33d31;
+  background: #fff8f5;
+}
+.contact-error {
+  padding: 14px;
+  border: 1px solid #dfc2ba;
+  border-radius: 6px;
+  background: #fff7f2;
+  color: #8d342a;
+  font-size: 12px;
+  line-height: 1.7;
+}
+.contact-error p {
+  margin: 0 0 6px;
+}
+.contact-error a,
+.contact-disclaimer a {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.button:disabled {
+  opacity: 0.65;
+  cursor: wait;
+}
+.form-trap {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+}
+.loading-spinner {
+  animation: loading-rotation 1.2s linear infinite;
+}
+@keyframes loading-rotation {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.route-loading {
+  min-height: 75vh;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
+  justify-content: center;
+  color: #526444;
+}
+.route-loading p {
+  font-size: 15px;
+}
+.cookie-settings-button {
+  background: transparent;
+  padding: 0;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.footer-links .cookie-settings-button {
+  font-size: 10px;
+  color: #a7b99d;
+}
+.cookie-banner {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  width: min(445px, calc(100% - 40px));
+  z-index: 80;
+  padding: 23px;
+  background: #fafbf5;
+  border: 1px solid #cfd7bf;
+  border-radius: 12px;
+  box-shadow: 0 8px 45px #1c2c2229;
+}
+.cookie-banner-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.cookie-banner-title svg {
+  flex-shrink: 0;
+  color: #688047;
+}
+.cookie-banner-title h2 {
+  font-size: 18px;
+  font-weight: 500;
+  letter-spacing: -0.4px;
+  margin: 0;
+}
+.cookie-banner > p {
+  font-size: 12px;
+  line-height: 1.8;
+  color: #59654e;
+  margin: 13px 0 18px;
+}
+.cookie-banner p a {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.cookie-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.cookie-actions .button {
+  min-height: 44px;
+  padding: 11px 12px;
+  font-size: 11px;
+}
+.cookie-essential {
+  background: #e6ebdc;
+  color: #2c412c;
+}
+.mobile-sticky-cta {
+  display: none;
+}
+.document-main {
+  min-height: 65vh;
+}
+.document-footer {
+  border-top: 1px solid #dfe3d5;
+  padding-block: 35px;
+}
+.document-footer > div {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 25px;
+  justify-content: space-between;
+}
+.document-footer p {
+  font-size: 11px;
+  color: #626d59;
+  line-height: 1.7;
+}
+.document-footer nav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 20px;
+  font-size: 11px;
+}
+.document-footer a:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.status-page {
+  padding-block: 70px 90px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  text-align: center;
+}
+.status-page .status-icon {
+  display: grid;
+  place-items: center;
+  width: 84px;
+  height: 84px;
+  border-radius: 50%;
+  background: #e6edda;
+  color: #647d43;
+  margin-bottom: 30px;
+}
+.status-page h1 {
+  font-size: clamp(38px, 5vw, 65px);
+  line-height: 1.15;
+  letter-spacing: -2px;
+  margin-block: 24px;
+}
+.status-page p {
+  max-width: 520px;
+  line-height: 1.9;
+  font-size: 14px;
+  color: #626d59;
+  margin: 0 0 17px;
+  overflow-wrap: anywhere;
+}
+.status-page p a {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.status-page > .button {
+  margin-top: 16px;
+}
+.status-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-top: 20px;
+}
+.legal-content {
+  max-width: 800px;
+  margin-inline: auto;
+  padding-block: 65px 90px;
+}
+.legal-content h1 {
+  font-size: clamp(40px, 5vw, 60px);
+  line-height: 1.15;
+  letter-spacing: -2px;
+  margin-block: 24px 16px;
+}
+.legal-content .legal-updated {
+  color: #6c765e;
+  font-size: 11px;
+  margin-bottom: 34px;
+}
+.legal-content h2 {
+  font-size: 24px;
+  letter-spacing: -0.6px;
+  margin-block: 32px 15px;
+}
+.legal-content p {
+  color: #56624c;
+  font-size: 14px;
+  line-height: 1.95;
+  margin: 14px 0;
+  overflow-wrap: anywhere;
+}
+.legal-content p a {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+@media (max-width: 600px) {
+  body:has(.mobile-sticky-cta) {
+    padding-bottom: calc(74px + env(safe-area-inset-bottom));
+  }
+  .mobile-sticky-cta {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    gap: 10px;
+    background: #faf9f6f7;
+    border-top: 1px solid #dfe3d5;
+    padding: 10px 20px calc(10px + env(safe-area-inset-bottom));
+    z-index: 60;
+    backdrop-filter: blur(10px);
+  }
+  .mobile-sticky-cta .button {
+    flex: 1;
+    justify-content: space-between;
+    min-height: 44px;
+    font-size: 12px;
+  }
+  .mobile-email {
+    display: grid;
+    place-items: center;
+    width: 46px;
+    border-radius: 7px;
+    background: #e4ebd7;
+  }
+  .cookie-banner {
+    left: 12px;
+    bottom: 12px;
+    width: calc(100% - 24px);
+    padding: 19px;
+  }
+  body:has(.mobile-sticky-cta) .cookie-banner {
+    bottom: calc(82px + env(safe-area-inset-bottom));
+  }
+  .cookie-banner-title h2 {
+    font-size: 17px;
+  }
+  .cookie-banner > p {
+    font-size: 11px;
+  }
+  .document-footer > div {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 18px;
+  }
+  .document-footer p {
+    margin: 0;
+    overflow-wrap: anywhere;
+  }
+  .document-footer nav {
+    gap: 18px;
+    font-size: 10px;
+  }
+  .status-page {
+    padding-block: 50px 65px;
+  }
+  .status-page p {
+    font-size: 12px;
+  }
+  .status-page h1 {
+    letter-spacing: -1.6px;
+  }
+  .legal-content {
+    padding-block: 40px 60px;
+  }
+  .legal-content p {
+    font-size: 13px;
+  }
+  .legal-content h2 {
+    font-size: 22px;
+  }
+  .contact-details a {
+    font-size: 11px;
+  }
+}
+
 @theme inline {
   --color-cream: #faf9f6;
   --color-ink: #26362b;
@@ -296,7 +615,7 @@ h1 {
   letter-spacing: -3.4px;
   margin: 29px 0 23px;
 }
-h1 .serif {
+.hero h1 .serif {
   color: #e6edcb;
 }
 .hero-content > p {

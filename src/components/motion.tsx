@@ -23,7 +23,7 @@ export function Motion({ children }: { children: React.ReactNode }) {
         gsap.utils.toArray<HTMLElement>("[data-reveal]").forEach((element) => {
           gsap.from(element, {
             y: 32,
-            autoAlpha: 0,
+            opacity: 0,
             duration: 0.8,
             ease: "power2.out",
             scrollTrigger: { trigger: element, start: "top 92%", once: true },

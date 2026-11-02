@@ -12,6 +12,9 @@ const dateString = (date: Date) =>
 test.beforeEach(async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/");
+  await page
+    .getByRole("button", { name: "Essential only", exact: true })
+    .click();
 });
 
 test("all four services return relevant mock quotes and enquiries", async ({
@@ -97,30 +100,36 @@ test("destination filters, saved state, modal and enquiry flow work", async ({
   ).toHaveValue(/Santorini escape/);
 });
 
-test("contact form validates fields and confirms the simulated enquiry", async ({
+test("contact form validates fields and redirects only after a successful send", async ({
   page,
 }) => {
   const submit = page.getByRole("button", {
     name: "Let’s start something good",
   });
   await submit.click();
-  await expect(page.locator(".contact-success")).toHaveCount(0);
+  await expect(page.locator("#name-error")).toBeVisible();
+  await page.getByRole("textbox", { name: /Your name/ }).fill("Alex Morgan");
   await page
-    .getByRole("textbox", { name: "Your name", exact: true })
-    .fill("Alex Morgan");
-  await page
-    .getByRole("textbox", { name: "Email address", exact: true })
+    .getByRole("textbox", { name: /Email address/ })
     .fill("alex@example.com");
   await page
-    .getByRole("textbox", { name: "What does your dream trip look like?" })
+    .getByRole("textbox", { name: /What does your dream trip look like/ })
     .fill("A relaxing week in Bali for two people.");
+  let release!: () => void;
+  const sent = new Promise<void>((resolve) => {
+    release = resolve;
+  });
+  await page.route("**/api/contact", async (route) => {
+    await sent;
+    await route.fulfill({ status: 200, json: { ok: true } });
+  });
   await submit.click();
-  await expect(page.getByRole("status")).toContainText(
-    "You’re going places, Alex.",
-  );
-  await expect(page.getByRole("status")).toContainText(
-    "haven’t been sent or stored",
-  );
+  await expect(
+    page.getByRole("button", { name: "Sending your enquiry…" }),
+  ).toBeDisabled();
+  release();
+  await expect(page).toHaveURL(/\/thank-you$/);
+  await expect(page.locator("h1")).toContainText("Good things start");
 });
 
 test("mobile navigation, keyboard tabs and responsive layouts", async ({

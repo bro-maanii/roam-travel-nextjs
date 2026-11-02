@@ -1,37 +1,79 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
 import {
   ArrowUpRight,
-  CheckCircle2,
+  LoaderCircle,
   Mail,
   MapPin,
   Plus,
   Minus,
 } from "lucide-react";
-
-const faqs = [
-  {
-    question: "Can you help plan my entire trip?",
-    answer:
-      "Absolutely. Choose a destination or tell us what you have in mind. Our demo planner brings flights, visa assistance, hotel stays, and car rentals into one simple enquiry.",
-  },
-  {
-    question: "Are the prices and bookings real?",
-    answer:
-      "This is a frontend assessment project. All packages, availability, prices, reviews, and company figures are sample data. No payment is taken and no booking or message is sent.",
-  },
-  {
-    question: "What does visa assistance include?",
-    answer:
-      "The sample service covers a document checklist, application preparation, and review. Government fees are separate, and visa approval always rests with the relevant authorities.",
-  },
-];
+import { CONTACT_EMAIL, LOCATION, faqs } from "@/lib/site";
+import {
+  contactServices,
+  validateContact,
+  type ContactErrors,
+  type ContactPayload,
+} from "@/lib/contact-validation";
 
 export function Contact({ enquiry }: { enquiry: string }) {
+  const router = useRouter();
+  const form = useRef<HTMLFormElement>(null);
   const [openFaq, setOpenFaq] = useState<number | null>(0);
-  const [sent, setSent] = useState(false);
-  const [name, setName] = useState("");
+  const [errors, setErrors] = useState<ContactErrors>({});
+  const [error, setError] = useState("");
+  const [pending, setPending] = useState(false);
+  async function submit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (pending) return;
+    const fields = new FormData(event.currentTarget);
+    const payload: ContactPayload = {
+      name: String(fields.get("name") || "").trim(),
+      email: String(fields.get("email") || "").trim(),
+      service: String(fields.get("service") || ""),
+      message: String(fields.get("message") || "").trim(),
+      website: String(fields.get("website") || ""),
+    };
+    const validation = validateContact(payload);
+    setErrors(validation);
+    setError("");
+    if (Object.keys(validation).length) {
+      const first = Object.keys(validation)[0];
+      (form.current?.elements.namedItem(first) as HTMLElement)?.focus();
+      return;
+    }
+    setPending(true);
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Idempotency-Key": crypto.randomUUID(),
+        },
+        body: JSON.stringify(payload),
+        signal: AbortSignal.timeout(20000),
+      });
+      const result = await response.json();
+      if (!response.ok || result.ok !== true) {
+        setErrors(result.errors || {});
+        setError(
+          result.error ||
+            "We couldn’t send your message. Please try again or email us directly.",
+        );
+        return;
+      }
+      router.push("/thank-you");
+    } catch {
+      setError(
+        "We couldn’t confirm the send. Check your connection and try again, or email us directly.",
+      );
+    } finally {
+      setPending(false);
+    }
+  }
   return (
     <section id="contact" className="contact-section section">
       <div className="contact-copy" data-reveal>
@@ -49,14 +91,14 @@ export function Contact({ enquiry }: { enquiry: string }) {
           We’d love to hear where you want to go.
         </p>
         <div className="contact-details">
+          <a href={`mailto:${CONTACT_EMAIL}`}>
+            <Mail size={18} /> {CONTACT_EMAIL}
+          </a>
           <span>
-            <Mail size={18} /> hello@roam.example
-          </span>
-          <span>
-            <MapPin size={18} /> Based in Pakistan. Curious about everywhere.
+            <MapPin size={18} /> {LOCATION}
           </span>
         </div>
-        <div className="faq-list">
+        <div className="faq-list" id="faq">
           {faqs.map((faq, index) => (
             <div className="faq-item" key={faq.question}>
               <h3>
@@ -78,95 +120,123 @@ export function Contact({ enquiry }: { enquiry: string }) {
         </div>
       </div>
       <div className="contact-card" data-reveal>
-        {sent ? (
-          <div className="contact-success" role="status">
-            <CheckCircle2 size={44} />
-            <span className="eyebrow">ONE STEP CLOSER</span>
-            <h3>You’re going places, {name.split(" ")[0]}.</h3>
-            <p>
-              Your demo enquiry is complete. In a live website, our travel team
-              would take it from here.
-            </p>
-            <p className="demo-notice">
-              This is a demonstration. Your details haven’t been sent or stored.
-            </p>
-            <button
-              type="button"
-              className="button button-dark"
-              onClick={() => setSent(false)}
-            >
-              Plan another adventure
-              <ArrowUpRight size={17} />
-            </button>
-          </div>
-        ) : (
-          <form
-            onSubmit={(event) => {
-              event.preventDefault();
-              setSent(true);
-            }}
-          >
-            <h3>Tell us a little about your escape.</h3>
-            <div className="form-row">
-              <label>
-                Your name
-                <input
-                  name="name"
-                  placeholder="Alex Morgan"
-                  autoComplete="name"
-                  required
-                  minLength={2}
-                  maxLength={80}
-                  pattern=".*\S.*"
-                  value={name}
-                  onChange={(event) => setName(event.target.value)}
-                />
-              </label>
-              <label>
-                Email address
-                <input
-                  name="email"
-                  type="email"
-                  placeholder="alex@example.com"
-                  autoComplete="email"
-                  required
-                  maxLength={150}
-                />
-              </label>
-            </div>
-            <label>
-              I’m interested in
-              <select name="service" defaultValue="A complete trip">
-                <option>A complete trip</option>
-                <option>Flight booking</option>
-                <option>Hotel booking</option>
-                <option>Visa assistance</option>
-                <option>Car rental</option>
-              </select>
-            </label>
-            <label>
-              What does your dream trip look like?
-              <textarea
-                key={enquiry}
-                name="message"
-                rows={4}
-                placeholder="A week somewhere sunny, a trip with the family..."
-                defaultValue={enquiry}
+        <form ref={form} onSubmit={submit} noValidate aria-busy={pending}>
+          <h3>Tell us a little about your escape.</h3>
+          <div className="form-row">
+            <label htmlFor="contact-name">
+              Your name
+              <input
+                id="contact-name"
+                name="name"
+                placeholder="Alex Morgan"
+                autoComplete="name"
                 required
-                minLength={10}
-                maxLength={2000}
+                minLength={2}
+                maxLength={80}
+                aria-invalid={!!errors.name}
+                aria-describedby={errors.name ? "name-error" : undefined}
               />
+              {errors.name && (
+                <span id="name-error" className="field-error">
+                  {errors.name}
+                </span>
+              )}
             </label>
-            <button type="submit" className="button button-dark">
-              Let’s start something good
-              <ArrowUpRight size={18} />
-            </button>
-            <p className="contact-disclaimer">
-              Just a demo, just a little wanderlust. This form doesn’t send or
-              store your information.
-            </p>
-          </form>
-        )}
+            <label htmlFor="contact-email">
+              Email address
+              <input
+                id="contact-email"
+                name="email"
+                type="email"
+                placeholder="alex@example.com"
+                autoComplete="email"
+                required
+                maxLength={150}
+                aria-invalid={!!errors.email}
+                aria-describedby={errors.email ? "email-error" : undefined}
+              />
+              {errors.email && (
+                <span id="email-error" className="field-error">
+                  {errors.email}
+                </span>
+              )}
+            </label>
+          </div>
+          <label htmlFor="contact-service">
+            I’m interested in
+            <select
+              id="contact-service"
+              name="service"
+              defaultValue="A complete trip"
+              aria-invalid={!!errors.service}
+              aria-describedby={errors.service ? "service-error" : undefined}
+            >
+              {contactServices.map((service) => (
+                <option key={service}>{service}</option>
+              ))}
+            </select>
+            {errors.service && (
+              <span className="field-error" id="service-error">
+                {errors.service}
+              </span>
+            )}
+          </label>
+          <label htmlFor="contact-message">
+            What does your dream trip look like?
+            <textarea
+              id="contact-message"
+              key={enquiry}
+              name="message"
+              rows={4}
+              placeholder="A week somewhere sunny, a trip with the family..."
+              defaultValue={enquiry}
+              required
+              minLength={10}
+              maxLength={2000}
+              aria-invalid={!!errors.message}
+              aria-describedby={errors.message ? "message-error" : undefined}
+            />
+            {errors.message && (
+              <span id="message-error" className="field-error">
+                {errors.message}
+              </span>
+            )}
+          </label>
+          <div className="form-trap" aria-hidden="true">
+            <label>
+              Leave this field empty
+              <input name="website" tabIndex={-1} autoComplete="off" />
+            </label>
+          </div>
+          {error && (
+            <div className="contact-error" role="alert">
+              <p>{error}</p>
+              <a href={`mailto:${CONTACT_EMAIL}`}>Email {CONTACT_EMAIL}</a>
+            </div>
+          )}
+          <button
+            type="submit"
+            className="button button-dark"
+            disabled={pending}
+          >
+            {pending ? (
+              <>
+                Sending your enquiry…
+                <LoaderCircle size={18} className="loading-spinner" />
+              </>
+            ) : (
+              <>
+                Let’s start something good
+                <ArrowUpRight size={18} />
+              </>
+            )}
+          </button>
+          <p className="contact-disclaimer">
+            We’ll use these details to respond to your enquiry. Please read our{" "}
+            <Link href="/privacy">privacy policy</Link>. Sending an enquiry does
+            not confirm a booking.
+          </p>
+        </form>
       </div>
     </section>
   );

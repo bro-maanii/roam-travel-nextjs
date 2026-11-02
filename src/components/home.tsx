@@ -25,6 +25,8 @@ import { Motion } from "./motion";
 import { SearchPanel } from "./search-panel";
 import { Destinations } from "./destinations";
 import { Contact } from "./contact";
+import Link from "next/link";
+import { CookiePreferencesButton } from "./consent-manager";
 
 const services = [
   {
@@ -473,6 +475,9 @@ export function Home() {
             <a href="#stories">Traveler stories</a>
             <a href="#contact">Let’s talk travel</a>
             <a href="#contact">Your questions, answered</a>
+            <Link href="/privacy">Privacy policy</Link>
+            <Link href="/terms">Terms of use</Link>
+            <CookiePreferencesButton />
           </div>
           <div className="footer-note">
             <Globe2 size={30} strokeWidth={1} />
@@ -491,7 +496,7 @@ export function Home() {
           <span>
             © {new Date().getFullYear()} Roam Travel. Made for the journey.
           </span>
-          <span>Frontend demo · No real bookings or payments</span>
+          <span>Travel made personal. Karachi, Pakistan.</span>
           <span>
             Designed with a little wanderlust <Asterisk size={13} />
           </span>

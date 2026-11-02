@@ -82,7 +82,7 @@ features = [
     (40, 261, "Testimonials, contact form & footer"),
     (310, 309, "Mobile, tablet & desktop layouts"),
     (310, 285, "GSAP hero, scroll, counters & hover"),
-    (310, 261, "Reusable components & setup README"),
+    (310, 261, "SEO, legal pages & privacy controls"),
 ]
 for x, y, label in features:
     pdf.setFillColor(LIME)
@@ -92,16 +92,16 @@ for x, y, label in features:
 pdf.setFillColor(INK)
 pdf.roundRect(40, 181, 515.28, 54, 7, fill=1, stroke=0)
 text(55, 214, "VERIFIED BEFORE HANDOFF", 8, LIME, "ArialBold")
-text(55, 195, "Production build + TypeScript | 5 unit tests | 7 browser tests", 10, CREAM)
+text(55, 195, "Production build + TypeScript | 7 unit tests | 13 browser tests", 10, CREAM)
 
 text(40, 151, "RUN LOCALLY", 8, MUTED, "ArialBold")
 text(40, 132, "npm ci  >  npm run dev", 11, INK, "ArialBold")
-text(40, 113, "Node.js 22.13+  /  No environment variables or backend required.", 9, MUTED)
+text(40, 113, "Node.js 22.13+  /  Email provider setup is documented in the README.", 9, MUTED)
 
 pdf.setStrokeColor(RULE)
 pdf.line(40, 91, 555.28, 91)
-text(40, 72, "Frontend demo. All prices, bookings, reviews and figures are illustrative.", 8, MUTED)
-text(40, 57, "No payments, reservations or contact messages are sent.", 8, MUTED)
+text(40, 72, "Sample travel prices, reviews and figures. No payments or reservations.", 8, MUTED)
+text(40, 57, "Contact enquiries require configured Resend or SMTP credentials.", 8, MUTED)
 text(479, 57, "02 NOV 2026", 8, MUTED)
 pdf.save()
 

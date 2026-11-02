@@ -5,10 +5,10 @@ import { ArrowUpRight, Menu, X } from "lucide-react";
 import { Brand } from "./brand";
 
 const links = [
-  { label: "Destinations", href: "#destinations" },
-  { label: "Our services", href: "#services" },
-  { label: "Why Roam", href: "#about" },
-  { label: "Travel stories", href: "#stories" },
+  { label: "Destinations", href: "/#destinations" },
+  { label: "Our services", href: "/#services" },
+  { label: "Why Roam", href: "/#about" },
+  { label: "Travel stories", href: "/#stories" },
 ];
 
 export function Header() {
@@ -24,7 +24,7 @@ export function Header() {
             </a>
           ))}
         </nav>
-        <a href="#contact" className="button button-dark header-cta">
+        <a href="/#contact" className="button button-dark header-cta">
           Let’s plan a trip <ArrowUpRight size={17} />
         </a>
         <button
@@ -49,7 +49,7 @@ export function Header() {
               <ArrowUpRight size={18} />
             </a>
           ))}
-          <a href="#contact" onClick={() => setOpen(false)}>
+          <a href="/#contact" onClick={() => setOpen(false)}>
             Let’s plan a trip <ArrowUpRight size={18} />
           </a>
         </nav>

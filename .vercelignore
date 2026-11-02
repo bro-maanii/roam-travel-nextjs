@@ -1,5 +1,5 @@
-.git
-.21st
+.*
+*.md
 node_modules
 .next
 artifacts
@@ -7,3 +7,4 @@ test-results
 playwright-report
 submission
 tests
+scripts
